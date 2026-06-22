@@ -162,6 +162,12 @@ function bindEvents() {
       closeMobileMenu();
     }
   });
+
+  window.addEventListener('resize', () => {
+    if (!window.matchMedia('(max-width: 1024px)').matches) {
+      closeMobileMenu();
+    }
+  });
 }
 
 function startExcavation() {
@@ -715,6 +721,7 @@ function renderAll() {
 function toggleMobileMenu() {
   const isOpen = els.sidebar?.classList.toggle('open') ?? false;
   els.sidebarOverlay?.classList.toggle('visible', isOpen);
+  els.sidebarOverlay?.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
   document.body.classList.toggle('menu-open', isOpen);
   syncMobileMenuButton(isOpen);
 }
@@ -722,6 +729,7 @@ function toggleMobileMenu() {
 function closeMobileMenu() {
   els.sidebar?.classList.remove('open');
   els.sidebarOverlay?.classList.remove('visible');
+  els.sidebarOverlay?.setAttribute('aria-hidden', 'true');
   document.body.classList.remove('menu-open');
   syncMobileMenuButton(false);
 }

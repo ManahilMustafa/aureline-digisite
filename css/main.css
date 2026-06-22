@@ -21,6 +21,7 @@ body {
 
 body.menu-open {
   overflow: hidden;
+  overscroll-behavior: none;
 }
 
 h1, h2, h3, h4 {
