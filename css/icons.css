@@ -91,6 +91,17 @@
   background: rgba(212, 175, 55, 0.2);
 }
 
+.tool-btn--active {
+  background: rgba(212, 175, 55, 0.35);
+  border-color: var(--color-artifact-gold);
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.4);
+  color: var(--color-highlight-amber);
+}
+
+.tool-btn--active:hover {
+  background: rgba(212, 175, 55, 0.45);
+}
+
 .tool-btn .icon {
   width: 1.25rem;
   height: 1.25rem;

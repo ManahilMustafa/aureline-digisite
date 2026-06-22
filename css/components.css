@@ -165,6 +165,37 @@
   box-shadow: var(--shadow-sm);
 }
 
+.workspace-tool-hint {
+  font-size: 0.65rem;
+  line-height: 1.45;
+  color: var(--color-weathered-stone);
+  text-align: center;
+  max-width: 7rem;
+  margin: 0;
+}
+
+.workspace-tool-hint--error {
+  color: var(--color-accent-red);
+  font-weight: 600;
+}
+
+.tool-btn--hint {
+  animation: toolHintPulse 1.2s ease;
+}
+
+@keyframes toolHintPulse {
+  0%, 100% { box-shadow: none; }
+  25%, 75% { box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.65); }
+}
+
+.dig-grid--tool-ready {
+  cursor: crosshair;
+}
+
+.dig-grid--tool-ready .dig-spot:not(.dig-spot--found) {
+  cursor: crosshair;
+}
+
 .workspace-grid {
   min-width: 0;
 }
@@ -543,13 +574,62 @@
   background: rgba(212, 175, 55, 0.35);
 }
 
+.dig-spot--wrong-tool {
+  animation: digWrongTool 0.5s ease;
+}
+
+@keyframes digWrongTool {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); border-color: var(--color-artifact-gold); }
+  25% { transform: translate(-48%, -50%) scale(1.05); border-color: var(--color-accent-red); }
+  50% { transform: translate(-52%, -50%) scale(1.05); border-color: var(--color-accent-red); }
+  75% { transform: translate(-50%, -50%) scale(1); border-color: var(--color-accent-red); }
+}
+
 .dig-spot--digging {
   animation: digPulse 0.6s ease;
+}
+
+.dig-spot--digging-brush {
+  animation: digBrush 0.7s ease;
+}
+
+.dig-spot--digging-trowel {
+  animation: digTrowel 0.55s ease;
+}
+
+.dig-spot--digging-pick {
+  animation: digPick 0.4s ease;
 }
 
 @keyframes digPulse {
   0%, 100% { transform: translate(-50%, -50%) scale(1); }
   50% { transform: translate(-50%, -50%) scale(0.85); background: rgba(212, 175, 55, 0.6); }
+}
+
+@keyframes digBrush {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); background: rgba(212, 175, 55, 0.35); }
+  50% { transform: translate(-50%, -50%) scale(0.92); background: rgba(239, 230, 216, 0.5); }
+}
+
+@keyframes digTrowel {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  40% { transform: translate(-48%, -52%) scale(0.88); background: rgba(212, 175, 55, 0.55); }
+  70% { transform: translate(-52%, -48%) scale(0.9); }
+}
+
+@keyframes digPick {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  25% { transform: translate(-50%, -54%) scale(0.8); background: rgba(212, 175, 55, 0.65); }
+  50% { transform: translate(-50%, -46%) scale(0.85); }
+}
+
+.workspace-tools--pulse {
+  animation: toolsPulse 0.6s ease;
+}
+
+@keyframes toolsPulse {
+  0%, 100% { box-shadow: var(--shadow-sm); }
+  50% { box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.55); }
 }
 
 .dig-spot--found {

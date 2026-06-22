@@ -18,8 +18,17 @@ let state = loadState();
 let currentView = 'landing';
 let currentStage = 1;
 let selectedArtifactId = null;
+let selectedTool = null;
 /** Session-only: true after "Begin Excavation" — not saved to localStorage */
 let appVisible = false;
+
+const TOOL_DIG_MS = { brush: 700, trowel: 550, pick: 400 };
+const TOOL_LABELS = { brush: 'Soft brush', trowel: 'Trowel', pick: 'Pick' };
+const REQUIRED_TOOL_HINTS = {
+  brush: 'This find is fragile — switch to the soft brush.',
+  trowel: 'Compacted soil here — use the trowel.',
+  pick: 'Hard-packed strata — use the pick.'
+};
 
 const els = {};
 
@@ -133,9 +142,17 @@ function bindEvents() {
       currentStage = 1;
       currentView = 'landing';
       selectedArtifactId = null;
+      selectedTool = null;
       appVisible = false;
       renderAll();
       showLandingPage();
+    }
+  });
+
+  els.main?.addEventListener('click', (e) => {
+    const toolBtn = e.target.closest('.tool-btn[data-tool]');
+    if (toolBtn) {
+      selectTool(toolBtn.dataset.tool);
     }
   });
 
@@ -152,8 +169,53 @@ function startExcavation() {
   showMainApp();
   switchStage(currentStage);
   navigateTo('dig-site');
+  selectTool('brush');
   refreshIcons(els.main);
   animateEntrance();
+}
+
+function selectTool(tool) {
+  if (!TOOL_DIG_MS[tool]) return;
+  selectedTool = tool;
+
+  document.querySelectorAll('.tool-btn[data-tool]').forEach(btn => {
+    const active = btn.dataset.tool === tool;
+    btn.classList.toggle('tool-btn--active', active);
+    btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+  });
+
+  document.querySelectorAll('.dig-grid').forEach(grid => {
+    grid.classList.add('dig-grid--tool-ready');
+    grid.dataset.activeTool = tool;
+  });
+
+  document.querySelectorAll('.workspace-tool-hint').forEach(hint => {
+    hint.classList.remove('workspace-tool-hint--error');
+    hint.textContent = '';
+    hint.append(`Using ${TOOL_LABELS[tool]}. Match the right tool to each spot, then click a `);
+    const mark = document.createElement('span');
+    mark.className = 'dig-spot-mark';
+    mark.textContent = '?';
+    hint.append(mark, ' on the grid.');
+  });
+}
+
+function setToolHint(container, message, isError = false) {
+  const hint = container?.querySelector('.workspace-tool-hint');
+  if (!hint) return;
+  hint.classList.toggle('workspace-tool-hint--error', isError);
+  hint.textContent = message;
+}
+
+function showWrongToolHint(container, artifact) {
+  const required = TOOL_LABELS[artifact.requiredTool] || 'another tool';
+  const message = REQUIRED_TOOL_HINTS[artifact.requiredTool]
+    || `Wrong tool — this spot needs the ${required}.`;
+  setToolHint(container, message, true);
+
+  const correctBtn = container?.querySelector(`.tool-btn[data-tool="${artifact.requiredTool}"]`);
+  correctBtn?.classList.add('tool-btn--hint');
+  setTimeout(() => correctBtn?.classList.remove('tool-btn--hint'), 1200);
 }
 
 /** Toggle landing vs main app — matches #landing-page + #view-main in HTML */
@@ -214,6 +276,8 @@ function switchStage(stage) {
   if (els.layerDisplay) els.layerDisplay.textContent = stage;
   renderDigSpots(stage);
   updateExcavationNext();
+  if (!selectedTool) selectTool('brush');
+  else selectTool(selectedTool);
 }
 
 function getStagePuzzleId(stage) {
@@ -373,9 +437,29 @@ function renderDigSpots(stage) {
       : `<span class="dig-spot-icon"><span class="dig-spot-mark">?</span></span>`;
 
     spot.addEventListener('click', () => {
+      if (!selectedTool) {
+        const toolsPanel = container.querySelector('.workspace-tools');
+        toolsPanel?.classList.add('workspace-tools--pulse');
+        setTimeout(() => toolsPanel?.classList.remove('workspace-tools--pulse'), 600);
+        return;
+      }
+
       if (!found) {
-        spot.classList.add('dig-spot--digging');
-        setTimeout(() => discoverArtifact(artifact.id), 600);
+        if (selectedTool !== artifact.requiredTool) {
+          spot.classList.add('dig-spot--wrong-tool');
+          setTimeout(() => spot.classList.remove('dig-spot--wrong-tool'), 500);
+          showWrongToolHint(container, artifact);
+          return;
+        }
+
+        setToolHint(container, `Using ${TOOL_LABELS[selectedTool]}. Excavating…`, false);
+        spot.classList.add('dig-spot--digging', `dig-spot--digging-${selectedTool}`);
+        const digMs = TOOL_DIG_MS[selectedTool] || 600;
+        setTimeout(() => {
+          spot.classList.remove('dig-spot--digging', `dig-spot--digging-${selectedTool}`);
+          discoverArtifact(artifact.id);
+          if (selectedTool) selectTool(selectedTool);
+        }, digMs);
       } else {
         showDiscoveryModal(artifact);
         updateStagePreview(artifact);
