@@ -69,6 +69,9 @@ function cacheElements() {
   els.sidebarOverlay = document.getElementById('sidebar-overlay');
   els.resetBtn = document.getElementById('reset-progress-btn');
   els.beginBtn = document.getElementById('begin-excavation');
+  els.excavationNextWrap = document.getElementById('excavation-next-wrap');
+  els.excavationNextBtn = document.getElementById('excavation-next-btn');
+  els.excavationNextLabel = document.getElementById('excavation-next-label');
   els.artifactsGrid = document.getElementById('artifacts-grid');
   els.artifactDetailPanel = document.getElementById('artifact-detail-panel');
   els.archiveList = document.getElementById('archive-list');
@@ -118,6 +121,11 @@ function bindEvents() {
 
   els.mobileMenuBtn?.addEventListener('click', toggleMobileMenu);
   els.sidebarOverlay?.addEventListener('click', closeMobileMenu);
+
+  els.excavationNextBtn?.addEventListener('click', () => {
+    navigateTo('puzzles');
+    closeMobileMenu();
+  });
 
   els.resetBtn?.addEventListener('click', () => {
     if (confirm('Reset all excavation progress? This cannot be undone.')) {
@@ -205,6 +213,35 @@ function switchStage(stage) {
   });
   if (els.layerDisplay) els.layerDisplay.textContent = stage;
   renderDigSpots(stage);
+  updateExcavationNext();
+}
+
+function getStagePuzzleId(stage) {
+  if (stage === 1) return 'symbol-matching';
+  if (stage === 2) return 'glyph-sequence';
+  return null;
+}
+
+function isStageFullyExcavated(stage) {
+  return ARTIFACTS.filter(a => a.stage === stage).every(a => state.discoveredArtifacts.includes(a.id));
+}
+
+function updateExcavationNext() {
+  const puzzleId = getStagePuzzleId(currentStage);
+  const show = puzzleId
+    && isStageFullyExcavated(currentStage)
+    && !state.completedPuzzles.includes(puzzleId);
+
+  els.excavationNextWrap?.classList.toggle('hidden', !show);
+
+  if (!show || !els.excavationNextLabel) return;
+
+  const labels = {
+    'symbol-matching': 'Next — Symbol Matching Puzzle',
+    'glyph-sequence': 'Next — Glyph Sequence Puzzle'
+  };
+  els.excavationNextLabel.textContent = labels[puzzleId] || 'Next — Solve Puzzle';
+  refreshIcons(els.excavationNextWrap);
 }
 
 function showStageLockedMessage(stage) {

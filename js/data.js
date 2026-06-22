@@ -2,7 +2,7 @@
  * Aurelian Digsite — Core content data
  * 12 artifacts (4 per stage), achievements, puzzles, reconstruction thresholds
  *
- * Artifact photos: assets/artifacts/{id}.png (or .PNG on disk — Windows is case-insensitive)
+ * Artifact photos: assets/artifacts/{id}.png (lowercase — required for Linux/Vercel hosting)
  */
 
 const artifactImage = (id) => `assets/artifacts/${id}.png`;
