@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Aurelian Digsite — Explore a fictional lost civilization through excavation, artifact discovery, and historical reconstruction.">
+  <title>Aurelian Digsite — Interactive Archaeology</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/icons.css">
+  <link rel="icon" href="assets/logo-mark.png" type="image/png">
+</head>
+<body>
+  <!-- Landing Experience -->
+  <section id="landing-page" class="landing-container">
+    <div class="landing-content">
+        <img src="assets/logo-mark.png" alt="Aurelian Digsite Logo" class="logo-hero">
+        <h1>AURELIAN DIGSITE</h1>
+        <p class="tagline">Dig deeper. Discover more.</p>
+        <p class="intro-text">Uncover the secrets of a forgotten civilization buried by time.</p>
+        
+        <button id="begin-excavation" class="btn-primary">
+          <i data-lucide="pickaxe" class="icon icon--btn" aria-hidden="true"></i>
+          Begin Excavation
+        </button>
+    </div>
+</section>
+
+  <!-- Main Application -->
+  <div id="view-main" class="app-layout hidden">
+    <div id="sidebar-overlay" class="sidebar-overlay" aria-hidden="true"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="sidebar" aria-label="Main navigation">
+      <div class="sidebar-brand">
+        <img src="assets/logo-mark.png" alt="" width="48" height="48" aria-hidden="true">
+        <span>Aurelian<br>Digsite</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" data-nav="dig-site" class="sidebar-link active" aria-current="page">
+          <span class="sidebar-link-left"><i data-lucide="pickaxe" class="icon" aria-hidden="true"></i> Dig Site</span>
+          <span class="sidebar-link-arrow"><i data-lucide="chevron-right" class="icon" aria-hidden="true"></i></span>
+        </a>
+        <a href="#" data-nav="artifacts" class="sidebar-link">
+          <span class="sidebar-link-left"><i data-lucide="gem" class="icon" aria-hidden="true"></i> Artifacts</span>
+          <span class="sidebar-link-arrow"><i data-lucide="chevron-right" class="icon" aria-hidden="true"></i></span>
+        </a>
+        <a href="#" data-nav="journal" class="sidebar-link">
+          <span class="sidebar-link-left"><i data-lucide="book-open" class="icon" aria-hidden="true"></i> Journal</span>
+          <span class="sidebar-link-arrow"><i data-lucide="chevron-right" class="icon" aria-hidden="true"></i></span>
+        </a>
+        <a href="#" data-nav="puzzles" class="sidebar-link">
+          <span class="sidebar-link-left"><i data-lucide="puzzle" class="icon" aria-hidden="true"></i> Puzzles</span>
+          <span class="sidebar-link-arrow"><i data-lucide="chevron-right" class="icon" aria-hidden="true"></i></span>
+        </a>
+        <a href="#" data-nav="reconstruction" class="sidebar-link">
+          <span class="sidebar-link-left"><i data-lucide="landmark" class="icon" aria-hidden="true"></i> Reconstruction</span>
+          <span class="sidebar-link-arrow"><i data-lucide="chevron-right" class="icon" aria-hidden="true"></i></span>
+        </a>
+        <a href="#" data-nav="archive" class="sidebar-link">
+          <span class="sidebar-link-left"><i data-lucide="archive" class="icon" aria-hidden="true"></i> Archive</span>
+          <span class="sidebar-link-arrow"><i data-lucide="chevron-right" class="icon" aria-hidden="true"></i></span>
+        </a>
+        <a href="#" data-nav="achievements" class="sidebar-link">
+          <span class="sidebar-link-left"><i data-lucide="award" class="icon" aria-hidden="true"></i> Achievements</span>
+          <span class="sidebar-link-arrow"><i data-lucide="chevron-right" class="icon" aria-hidden="true"></i></span>
+        </a>
+        <a href="#" data-nav="settings" class="sidebar-link">
+          <span class="sidebar-link-left"><i data-lucide="settings" class="icon" aria-hidden="true"></i> Settings</span>
+          <span class="sidebar-link-arrow"><i data-lucide="chevron-right" class="icon" aria-hidden="true"></i></span>
+        </a>
+      </nav>
+    </aside>
+
+    <div class="main-wrapper">
+      <!-- Doc-compliant status: Layer + Discoveries only (no Points / Energy) -->
+      <header class="dig-header" aria-label="Excavation status">
+        <button type="button" id="mobile-menu-btn" class="mobile-menu-btn dig-header__menu" aria-label="Open navigation menu" aria-expanded="false" aria-controls="sidebar">
+          <i data-lucide="menu" class="icon" aria-hidden="true"></i>
+        </button>
+        <div class="dig-header__stats">
+          <div class="dig-header__item">
+            <span class="dig-header__label">Layer</span>
+            <strong id="layer-display" class="dig-header__value">1</strong>
+          </div>
+          <div class="dig-header__item">
+            <span class="dig-header__label">Discoveries</span>
+            <strong id="discoveries-display" class="dig-header__value">0 / 12</strong>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content Panels -->
+      <main id="app" class="content-area">
+
+        <!-- Dig Site / Excavation Stages -->
+        <section class="view-panel active" data-view="dig-site" aria-label="Excavation site">
+          <div class="panel-header">
+            <h2><i data-lucide="pickaxe" class="icon" aria-hidden="true"></i> Excavation Site</h2>
+            <p><strong>Click the pulsing gold circles</strong> on the excavation grid to dig for artifacts.</p>
+          </div>
+
+          <div class="stage-tabs" role="tablist" aria-label="Excavation layers">
+            <button type="button" class="stage-tab active" data-stage="1" role="tab" aria-selected="true">Layer 1 — Surface Sands</button>
+            <button type="button" class="stage-tab locked" data-stage="2" role="tab" aria-selected="false">Layer 2 — Clay Strata</button>
+            <button type="button" class="stage-tab locked" data-stage="3" role="tab" aria-selected="false">Layer 3 — Temple Chamber</button>
+          </div>
+
+          <!-- Stage 1 -->
+          <div id="excavation-stage-1" class="excavation-stage active stage-surface">
+            <div class="stage-info">
+              <h3>Surface Sands</h3>
+              <p>Sector A7 — Layer 1. The uppermost stratum reveals traces of daily Aurelian life.</p>
+            </div>
+            <div class="excavation-workspace">
+              <aside class="workspace-tools" aria-label="Excavation tools">
+                <h4 class="workspace-label">Tools</h4>
+                <button type="button" class="tool-btn" title="Soft brush" aria-label="Soft brush"><i data-lucide="paintbrush" class="icon" aria-hidden="true"></i></button>
+                <button type="button" class="tool-btn" title="Trowel" aria-label="Trowel"><i data-lucide="shovel" class="icon" aria-hidden="true"></i></button>
+                <button type="button" class="tool-btn" title="Pick" aria-label="Pick"><i data-lucide="hammer" class="icon" aria-hidden="true"></i></button>
+              </aside>
+              <div class="workspace-grid">
+                <div class="excavation-scene">
+                  <div class="dig-grid" role="img" aria-label="Excavation grid for Layer 1">
+                    <div class="grid-lines"></div>
+                  </div>
+                </div>
+              </div>
+              <aside class="workspace-preview" aria-label="Artifact preview">
+                <h4 class="workspace-label">Preview</h4>
+                <div id="artifact-preview-1" class="artifact-preview-panel">
+                  <p class="preview-placeholder"><i data-lucide="search" class="icon" aria-hidden="true"></i> Excavate a dig spot to preview artifacts.</p>
+                </div>
+              </aside>
+            </div>
+          </div>
+
+          <!-- Stage 2 -->
+          <div id="excavation-stage-2" class="excavation-stage stage-clay">
+            <div class="stage-info">
+              <h3>Clay Strata</h3>
+              <p>Sector A7 — Layer 2. Compact clay rich with trade goods and inscribed ostraca.</p>
+            </div>
+            <div class="excavation-workspace">
+              <aside class="workspace-tools" aria-label="Excavation tools">
+                <h4 class="workspace-label">Tools</h4>
+                <button type="button" class="tool-btn" title="Soft brush" aria-label="Soft brush"><i data-lucide="paintbrush" class="icon" aria-hidden="true"></i></button>
+                <button type="button" class="tool-btn" title="Trowel" aria-label="Trowel"><i data-lucide="shovel" class="icon" aria-hidden="true"></i></button>
+                <button type="button" class="tool-btn" title="Pick" aria-label="Pick"><i data-lucide="hammer" class="icon" aria-hidden="true"></i></button>
+              </aside>
+              <div class="workspace-grid">
+                <div class="excavation-scene excavation-scene--trench">
+                  <div class="trench-walls"></div>
+                  <div class="dig-grid dig-grid--clay" role="img" aria-label="Excavation grid for Layer 2">
+                    <div class="grid-lines"></div>
+                  </div>
+                </div>
+              </div>
+              <aside class="workspace-preview" aria-label="Artifact preview">
+                <h4 class="workspace-label">Preview</h4>
+                <div id="artifact-preview-2" class="artifact-preview-panel">
+                  <p class="preview-placeholder"><i data-lucide="search" class="icon" aria-hidden="true"></i> Excavate a dig spot to preview artifacts.</p>
+                </div>
+              </aside>
+            </div>
+          </div>
+
+          <!-- Stage 3 -->
+          <div id="excavation-stage-3" class="excavation-stage stage-temple">
+            <div class="stage-info">
+              <h3>Temple Chamber</h3>
+              <p>Sector A7 — Layer 3. A sacred chamber where priests once performed solar rites.</p>
+            </div>
+            <div class="excavation-workspace">
+              <aside class="workspace-tools" aria-label="Excavation tools">
+                <h4 class="workspace-label">Tools</h4>
+                <button type="button" class="tool-btn" title="Soft brush" aria-label="Soft brush"><i data-lucide="paintbrush" class="icon" aria-hidden="true"></i></button>
+                <button type="button" class="tool-btn" title="Trowel" aria-label="Trowel"><i data-lucide="shovel" class="icon" aria-hidden="true"></i></button>
+                <button type="button" class="tool-btn" title="Pick" aria-label="Pick"><i data-lucide="hammer" class="icon" aria-hidden="true"></i></button>
+              </aside>
+              <div class="workspace-grid">
+                <div class="excavation-scene excavation-scene--temple">
+                  <div class="temple-columns"></div>
+                  <div class="dig-grid dig-grid--temple" role="img" aria-label="Excavation grid for Layer 3">
+                    <div class="grid-lines"></div>
+                    <div class="altar"></div>
+                  </div>
+                </div>
+              </div>
+              <aside class="workspace-preview" aria-label="Artifact preview">
+                <h4 class="workspace-label">Preview</h4>
+                <div id="artifact-preview-3" class="artifact-preview-panel">
+                  <p class="preview-placeholder"><i data-lucide="search" class="icon" aria-hidden="true"></i> Excavate a dig spot to preview artifacts.</p>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </section>
+
+        <!-- Artifacts Gallery -->
+        <section class="view-panel" data-view="artifacts" aria-label="Artifacts gallery">
+          <div class="panel-header">
+            <h2><i data-lucide="gem" class="icon" aria-hidden="true"></i> Artifact Gallery</h2>
+            <p>Browse all Aurelian artifacts across excavation layers. Select a piece to inspect it.</p>
+          </div>
+          <div class="artifacts-layout">
+            <div id="artifacts-grid" class="artifacts-grid"></div>
+            <aside id="artifact-detail-panel" class="artifact-detail-panel" aria-label="Selected artifact detail">
+              <p class="preview-placeholder"><i data-lucide="hand" class="icon" aria-hidden="true"></i> Select an artifact to view details.</p>
+            </aside>
+          </div>
+        </section>
+
+        <!-- Collection Journal -->
+        <section class="view-panel" data-view="journal" aria-label="Collection journal">
+          <div class="panel-header">
+            <h2><i data-lucide="book-open" class="icon" aria-hidden="true"></i> Collection Journal</h2>
+            <p>Your personal record of every artifact discovered at the Aurelian dig site.</p>
+          </div>
+          <div class="journal-summary">
+            <i data-lucide="library" class="icon" aria-hidden="true"></i>
+            <span>Collection Progress:</span>
+            <strong id="journal-progress">0%</strong>
+          </div>
+          <div id="journal-grid" class="journal-grid"></div>
+        </section>
+
+        <!-- Puzzles -->
+        <section class="view-panel" data-view="puzzles" aria-label="Puzzle interface">
+          <div class="panel-header">
+            <h2><i data-lucide="puzzle" class="icon" aria-hidden="true"></i> Puzzle Chamber</h2>
+            <p>Solve ancient puzzles to unlock deeper excavation layers.</p>
+          </div>
+
+          <article class="puzzle-panel">
+            <header class="puzzle-panel-header">
+              <h3>Symbol Matching</h3>
+              <span class="puzzle-status" data-puzzle-status="symbol-matching">Locked</span>
+            </header>
+            <p class="puzzle-desc">Match pairs of Aurelian symbols to decipher the path to Layer 2.</p>
+            <div id="puzzle-symbol-matching" class="puzzle-container"></div>
+          </article>
+
+          <article class="puzzle-panel">
+            <header class="puzzle-panel-header">
+              <h3>Glyph Sequence</h3>
+              <span class="puzzle-status" data-puzzle-status="glyph-sequence">Locked</span>
+            </header>
+            <p class="puzzle-desc">Enter the sacred glyph sequence to unlock the temple chamber.</p>
+            <div id="puzzle-glyph-sequence" class="puzzle-container"></div>
+          </article>
+        </section>
+
+        <!-- Reconstruction -->
+        <section class="view-panel" data-view="reconstruction" aria-label="Historical reconstruction">
+          <div class="panel-header">
+            <h2><i data-lucide="landmark" class="icon" aria-hidden="true"></i> Historical Reconstruction</h2>
+            <p>Watch the Aurelian civilization rebuild as you uncover more artifacts.</p>
+          </div>
+          <div class="reconstruction-wrapper">
+            <div id="reconstruction-scene" class="reconstruction-scene" data-state="ruins" aria-live="polite">
+              <img
+                src="assets/reconstruction/background.webp"
+                alt="Ruins — collapsed temples and excavation trenches at Sector A7"
+                class="recon-layer recon-layer--base"
+                width="1600"
+                height="900"
+                loading="lazy"
+              >
+              <img
+                src="assets/reconstruction/restoredd.PNG"
+                alt="Restored Aurelian civilization — ziggurats, river city, and golden-age architecture"
+                class="recon-layer recon-layer--vision"
+                width="1600"
+                height="900"
+                loading="lazy"
+              >
+              <div class="recon-vignette" aria-hidden="true"></div>
+              <div class="recon-state-badge" id="recon-state-badge">Ruins</div>
+            </div>
+            <div class="reconstruction-info">
+              <h3 id="reconstruction-label">Ruins</h3>
+              <p id="reconstruction-desc">Only shattered columns and buried foundations remain.</p>
+              <div class="reconstruction-progress">
+                <span class="reconstruction-progress-label">Artifacts uncovered</span>
+                <strong id="reconstruction-artifact-count">0 / 12</strong>
+              </div>
+              <div class="reconstruction-legend" role="list" aria-label="Reconstruction stages">
+                <span class="legend-item" data-state="ruins" role="listitem">0–3 artifacts — Ruins</span>
+                <span class="legend-item" data-state="partial" role="listitem">4–8 artifacts — Partial Reconstruction</span>
+                <span class="legend-item" data-state="restored" role="listitem">9–12 artifacts — Restored Civilization</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Archive -->
+        <section class="view-panel" data-view="archive" aria-label="Discovery archive">
+          <div class="panel-header">
+            <h2><i data-lucide="archive" class="icon" aria-hidden="true"></i> Discovery Archive</h2>
+            <p>Permanent record of every artifact unearthed at Sector A7.</p>
+          </div>
+          <div id="archive-list" class="archive-list"></div>
+        </section>
+
+        <!-- Achievements -->
+        <section class="view-panel" data-view="achievements" aria-label="Achievements">
+          <div class="panel-header">
+            <h2><i data-lucide="award" class="icon" aria-hidden="true"></i> Achievement Badges</h2>
+            <p>Milestones earned through your archaeological discoveries.</p>
+          </div>
+          <div id="achievements-grid" class="achievements-grid"></div>
+        </section>
+
+        <!-- Settings -->
+        <section class="view-panel" data-view="settings" aria-label="Settings">
+          <div class="panel-header">
+            <h2><i data-lucide="settings" class="icon" aria-hidden="true"></i> Settings</h2>
+            <p>Manage your excavation session.</p>
+          </div>
+          <div class="settings-panel">
+            <p>Progress is automatically saved to your browser. You can reset all discoveries and start fresh below.</p>
+            <button type="button" id="reset-progress-btn" class="btn btn--danger">
+              <i data-lucide="rotate-ccw" class="icon" aria-hidden="true"></i>
+              Reset All Progress
+            </button>
+          </div>
+        </section>
+      </main>
+
+      <!-- Footer -->
+      <footer class="site-footer">
+        <p>&copy; 2026 Aurelian Digsite — Interactive Archaeology Experience</p>
+        <p class="footer-tagline">Dig deeper. Discover more.</p>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Discovery Modal -->
+  <div id="discovery-modal" class="modal" role="dialog" aria-labelledby="modal-artifact-name" aria-hidden="true">
+    <div class="modal-content discovery-modal-content">
+      <button type="button" id="modal-close" class="modal-close" aria-label="Close discovery panel">
+        <i data-lucide="x" class="icon" aria-hidden="true"></i>
+      </button>
+      <div class="discovery-badge"><i data-lucide="sparkles" class="icon" aria-hidden="true"></i> Artifact Discovered!</div>
+      <img id="modal-artifact-image" src="" alt="" class="modal-artifact-image">
+      <h2 id="modal-artifact-name"></h2>
+      <span id="modal-artifact-category" class="modal-category"></span>
+      <blockquote id="modal-discovery-note" class="modal-discovery-note"></blockquote>
+      <p id="modal-artifact-desc" class="modal-desc"></p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script type="module" src="js/app.js"></script>
+  
+</body>
+</html>
